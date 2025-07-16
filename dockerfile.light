@@ -1,0 +1,68 @@
+# Usar una imagen base más pequeña para reducir el tamaño inicial.
+FROM debian:bookworm-slim
+
+# Evitar diálogos interactivos durante la instalación.
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Optimización: Combinar todas las instalaciones y configuraciones en una sola capa RUN
+# para minimizar el número de capas de la imagen. Usar --no-install-recommends para reducir el tamaño.
+RUN \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    wget \
+    curl \
+    sudo \
+    build-essential \
+    clang \
+    gcc-multilib \
+    ca-certificates \
+    gnupg \
+    && \
+    # Agregar el repositorio de Node.js (requerido por code-server)
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" > /etc/apt/sources.list.d/nodesource.list \
+    && \
+    # Actualizar de nuevo para obtener las nuevas listas de repositorios e instalar Node.js
+    apt-get update && \
+    apt-get install -y --no-install-recommends nodejs \
+    && \
+    # Instalar code-server usando su script oficial
+    curl -fsSL https://code-server.dev/install.sh | sh \
+    && \
+    # Crear el usuario no-root y concederle permisos de sudo
+    useradd -m -s /bin/bash -G sudo developer && \
+    echo "developer ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
+    && \
+    # Limpiar para eliminar archivos innecesarios y reducir el tamaño de la imagen
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Cambiar al usuario developer y configurar el entorno
+USER developer
+WORKDIR /home/developer/project
+
+# Copiar el código fuente al contenedor.
+COPY --chown=developer:developer main.c .
+
+# Crear un archivo README con instrucciones claras para el usuario
+RUN echo '# C Assembly Project' > README.md && \
+    echo '' >> README.md && \
+    echo 'This environment is ready for you to compile and run your code.' >> README.md && \
+    echo '' >> README.md && \
+    echo '## How to Compile' >> README.md && \
+    echo 'Open a terminal in VS Code (Menu > Terminal > New Terminal) and run:' >> README.md && \
+    echo '```bash' >> README.md && \
+    echo 'clang -m32 -masm=intel -fms-extensions -D_MSC_VER main.c -o suma' >> README.md && \
+    echo '```' >> README.md && \
+    echo '' >> README.md && \
+    echo '## How to Run' >> README.md && \
+    echo 'After compiling, run your program with:' >> README.md && \
+    echo '```bash' >> README.md && \
+    echo './suma' >> README.md && \
+    echo '```' >> README.md
+
+# Exponer el puerto y establecer el comando de inicio con una contraseña fija
+EXPOSE 8080
+ENV PASSWORD="123456"
+CMD ["sh", "-c", "code-server --bind-addr 0.0.0.0:8080 --auth password ."]
