@@ -33,7 +33,16 @@ Para desplegar el contenedor (una vez tenga instalado docker) debe:
     ```bash
     docker run --rm -p 8080:8080 c-dev-env
     ```
+### Uso en interfaz web
 
-5. Entrar al ambiente de desarrollo: Dirijase a su navegador de preferencia y podrá utilizar el ambiente de desarrollo en la siguiente url http://localhost:8080
+Dirijase a su navegador de preferencia y podrá utilizar el ambiente de desarrollo en la siguiente url http://localhost:8080
 
-## Sobre el contenedor
+### Uso con VS code local
+
+Es posible conectarse al servidor de VS code del contenedor desde su VSCode local utilizando la extensión "Dev Containers". 
+
+Para realizar la conexión puede seleccionar desde la paleta de comandos ("F1" o "⌘+Shift+P") seleccionando "Dev Containers: Attach to Running Container..." donde aparecerá su contenedor con el tag de la imagen (si siguió el ejemplo "c-dev-env").
+
+Desde la interfaz gráfica puede usar la vista "Remote Explorer" desde la barra de actividades de VS Code. En esta pestaña dentro de la vista "Dev containers" debería ver su contenedor con el tag de la imagen asignado. Seleccione la inline action "Attach to Container" para conectarse.
+
+Al abrirse la ventana nueva utilice "Open Folder" y seleccione la carpeta "projects" donde encontrará el ejemplo base.

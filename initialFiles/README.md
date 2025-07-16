@@ -1,16 +1,18 @@
-# C Assembly Project
-    
-This environment is ready for you to compile and run your code.
-## How to Compile
-### With terminal
-Open a terminal in VS Code (Menu > Terminal > New Terminal) and run:
+# Proyecto de ejemplo en C
+
+Este ambiente esta preparado para correr y ejecutar su código
+
+## Compilar
+### En terminal
+Abra la terminal en VS Code (Menu > Terminal > New Terminal) y ejecute:
 ```bash
-clang -m32 -masm=intel -fms-extensions -D_MSC_VER main.c -o suma
+clang -m32 -masm=intel -fms-extensions -D_MSC_VER <nombreArchivo> -o <nombreEjecutable>
 ```
 
-## How to Run
-### With terminal
-After compiling, run your program with:
+## Ejecutar
+### Con terminal
+**LUEGO DE COMPILAR** ejecute su programa con:
 ```bash
-./suma
+./<nombreEjecutable>
 ```
+
