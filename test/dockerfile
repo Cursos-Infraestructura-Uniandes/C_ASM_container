@@ -1,0 +1,23 @@
+# Dockerfile with Clang, VS Code (web), a fixed password, and 32-bit libraries
+FROM ubuntu:22.04
+
+# Avoid interactive prompts during installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 1. Install system dependencies, Clang compiler, and 32-bit libraries
+RUN apt-get update && apt-get install -y \
+    openssh-server \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configure SSH server
+RUN mkdir /var/run/sshd
+
+# Generate SSH host keys
+RUN ssh-keygen -A 
+
+RUN useradd -m -s /bin/bash testing && \
+    echo 'testing:testing' | chpasswd 
+
+# Start the SSH service
+EXPOSE 22
+CMD ["/usr/sbin/sshd", "-D"]

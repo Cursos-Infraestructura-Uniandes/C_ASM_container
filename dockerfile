@@ -15,8 +15,16 @@ RUN apt-get update && apt-get install -y \
     openssh-server \
     && rm -rf /var/lib/apt/lists/*
 
-# Start openSSH server
-RUN systemctl enable ssh
+
+
+# Configure SSH server
+RUN mkdir /var/run/sshd
+# Generate SSH host keys
+RUN ssh-keygen -A 
+
+RUN useradd -m -s /bin/bash testing && \
+    echo 'testing:testing' | chpasswd 
+
 
 # 2. Create a non-root user for development
 RUN useradd -m -s /bin/bash -G sudo developer && \
@@ -39,8 +47,12 @@ COPY --chown=developer:developer initialFiles/main.c .
 COPY --chown=developer:developer initialFiles/README.md .
 
 # 8. Expose the port and set the start command with a fixed password
-EXPOSE 8080
+#EXPOSE 8080
 
 # El password de VSCODE "123456"
-ENV PASSWORD="123456"
-CMD ["sh", "-c", "code-server --bind-addr 0.0.0.0:8080 --auth password ."]
+#ENV PASSWORD="123456"
+#CMD ["sh", "-c", "code-server --bind-addr 0.0.0.0:8080 --auth password ."]
+
+# Start the SSH service
+EXPOSE 22
+CMD ["/usr/sbin/sshd", "-D"]
