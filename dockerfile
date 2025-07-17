@@ -12,7 +12,11 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     clang \
     gcc-multilib \
+    openssh-server \
     && rm -rf /var/lib/apt/lists/*
+
+# Start openSSH server
+RUN systemctl enable ssh
 
 # 2. Create a non-root user for development
 RUN useradd -m -s /bin/bash -G sudo developer && \
