@@ -38,29 +38,16 @@ RUN \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Create the directory and assing the user 
+RUN mkdir -p /home/developer/project && chown -R developer:developer /home/developer
+
 # Cambiar al usuario developer y configurar el entorno
 USER developer
 WORKDIR /home/developer/project
 
-# Copiar el código fuente al contenedor.
-COPY --chown=developer:developer main.c .
-
-# Crear un archivo README con instrucciones claras para el usuario
-RUN echo '# C Assembly Project' > README.md && \
-    echo '' >> README.md && \
-    echo 'This environment is ready for you to compile and run your code.' >> README.md && \
-    echo '' >> README.md && \
-    echo '## How to Compile' >> README.md && \
-    echo 'Open a terminal in VS Code (Menu > Terminal > New Terminal) and run:' >> README.md && \
-    echo '```bash' >> README.md && \
-    echo 'clang -m32 -masm=intel -fms-extensions -D_MSC_VER main.c -o suma' >> README.md && \
-    echo '```' >> README.md && \
-    echo '' >> README.md && \
-    echo '## How to Run' >> README.md && \
-    echo 'After compiling, run your program with:' >> README.md && \
-    echo '```bash' >> README.md && \
-    echo './suma' >> README.md && \
-    echo '```' >> README.md
+# Copy example source files into the container
+COPY --chown=developer:developer initialFiles/main.c .
+COPY --chown=developer:developer initialFiles/README.md .
 
 # Exponer el puerto y establecer el comando de inicio con una contraseña fija
 EXPOSE 8080
