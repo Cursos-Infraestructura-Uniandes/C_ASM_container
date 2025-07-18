@@ -16,7 +16,6 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-
 # Configure SSH server
 RUN mkdir /var/run/sshd
 # Generate SSH host keys

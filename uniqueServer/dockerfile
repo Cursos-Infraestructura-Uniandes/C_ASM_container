@@ -7,16 +7,25 @@ ENV DEBIAN_FRONTEND=noninteractive
 # 1. Install system dependencies, Clang compiler, and 32-bit libraries
 RUN apt-get update && apt-get install -y \
     openssh-server \
+    curl \
+    sudo \
+    build-essential \
+    clang \
+    gcc-multilib \
     && rm -rf /var/lib/apt/lists/*
-
+    
 # Configure SSH server
 RUN mkdir /var/run/sshd
-
 # Generate SSH host keys
 RUN ssh-keygen -A 
 
 RUN useradd -m -s /bin/bash testing && \
     echo 'testing:testing' | chpasswd 
+
+# 3. Install Node.js (required by code-server) and code-server itself
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
+RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # Start the SSH service
 EXPOSE 22
