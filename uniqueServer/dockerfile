@@ -19,8 +19,20 @@ RUN mkdir /var/run/sshd
 # Generate SSH host keys
 RUN ssh-keygen -A 
 
+# TODO: REMOVE ON PRODUCTION
 RUN useradd -m -s /bin/bash testing && \
     echo 'testing:testing' | chpasswd 
+
+# Create the restricted users
+COPY initialFiles/createRestrictedUsers.sh /tmp/createRestrictedUsers.sh
+COPY initialFiles/users.csv /tmp/users.csv
+COPY initialFiles/main.c /tmp/main.c
+COPY initialFiles/README.md /tmp/README.md
+RUN ls /tmp
+
+RUN chmod +x /tmp/createRestrictedUsers.sh \
+    && /tmp/createRestrictedUsers.sh
+
 
 # 3. Install Node.js (required by code-server) and code-server itself
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
