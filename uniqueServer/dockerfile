@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # 1. Install system dependencies, Clang compiler, and 32-bit libraries
 RUN apt-get update && apt-get install -y \
+    nano \
     openssh-server \
     curl \
     sudo \
@@ -20,8 +21,8 @@ RUN mkdir /var/run/sshd
 RUN ssh-keygen -A 
 
 # TODO: REMOVE ON PRODUCTION
-RUN useradd -m -s /bin/bash testing && \
-    echo 'testing:testing' | chpasswd 
+# RUN useradd -m -s /bin/bash testing && \
+#   echo 'testing:testing' | chpasswd
 
 # Create the restricted users
 COPY initialFiles/createRestrictedUsers.sh /tmp/createRestrictedUsers.sh
@@ -31,8 +32,12 @@ COPY initialFiles/README.md /tmp/README.md
 RUN ls /tmp
 
 RUN chmod +x /tmp/createRestrictedUsers.sh \
-    && /tmp/createRestrictedUsers.sh
+    && ./tmp/createRestrictedUsers.sh
 
+RUN rm /tmp/createRestrictedUsers.sh \
+    && rm /tmp/users.csv \
+    && rm /tmp/main.c \
+    && rm /tmp/README.md
 
 # 3. Install Node.js (required by code-server) and code-server itself
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \

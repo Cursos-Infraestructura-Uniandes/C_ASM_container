@@ -1,10 +1,10 @@
 #!/bin/bash
 
 CSV_FILE="/tmp/users.csv"
-USE_RBASH=1  # 1 to use restricted bash
+USE_RBASH=0  # 1 to use restricted bash
 
 # Commands to copy into each user's ~/bin
-COMMANDS=(/usr/bin/clang /bin/ls)
+COMMANDS=(/usr/bin/clang /bin/ls) 
 
 tail -n +2 "$CSV_FILE" | while IFS=',' read -r username password; do
     echo "Processing user: $username"
@@ -26,22 +26,23 @@ tail -n +2 "$CSV_FILE" | while IFS=',' read -r username password; do
 
     # Create work directory and bin
     mkdir -p "/home/$username/work"
-    mkdir -p "/home/$username/bin"
     chown -R "$username:$username" "/home/$username/work" "/home/$username/bin"
     
     # Copy the initial files for the students
     cp /tmp/main.c "/home/$username/work/"
     cp /tmp/README.md "/home/$username/work/"
 
-    # Copy allowed commands
-    for cmd in "${COMMANDS[@]}"; do
-        cp "$cmd" "/home/$username/bin/"
-    done
-
+    if [[ "$USE_RBASH" -eq 1 ]]; then
+        mkdir -p "/home/$username/bin"
+        # Copy allowed commands
+        for cmd in "${COMMANDS[@]}"; do
+            cp "$cmd" "/home/$username/bin/"
+        done
+    fi
     # Setup .bash_profile
+    
     PROFILE="/home/$username/.bash_profile"
     {
-        echo 'export PATH=$HOME/bin'
         echo 'cd ~/work'
     } > "$PROFILE"
 
@@ -50,3 +51,4 @@ tail -n +2 "$CSV_FILE" | while IFS=',' read -r username password; do
 
     echo "User $username set up successfully."
 done
+
