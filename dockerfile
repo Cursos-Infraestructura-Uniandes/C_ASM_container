@@ -21,9 +21,8 @@ RUN mkdir /var/run/sshd
 # Generate SSH host keys
 RUN ssh-keygen -A 
 
-RUN useradd -m -s /bin/bash testing && \
-    echo 'testing:testing' | chpasswd 
-
+#RUN useradd -m -s /bin/bash testing && \
+#    echo 'testing:testing' | chpasswd 
 
 # 2. Create a non-root user for development
 RUN useradd -m -s /bin/bash -G sudo developer && \
@@ -42,16 +41,14 @@ USER developer
 WORKDIR /home/developer/project
 
 # Copy example source files into the container
-COPY --chown=developer:developer initialFiles/main.c .
-COPY --chown=developer:developer initialFiles/README.md .
+COPY --chown=developer:developer uniqueServer/initialFiles/main.c .
+COPY --chown=developer:developer uniqueServer/initialFiles/README.md .
 
 # 8. Expose the port and set the start command with a fixed password
-#EXPOSE 8080
-
-# El password de VSCODE "123456"
-#ENV PASSWORD="123456"
-#CMD ["sh", "-c", "code-server --bind-addr 0.0.0.0:8080 --auth password ."]
-
-# Start the SSH service
+EXPOSE 8080
 EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]
+
+# El password de VSCODE, this is only to be used in local development
+ENV PASSWORD="123456"
+# start both services
+CMD ["sh", "-c", "/usr/sbin/sshd -D && code-server --bind-addr 0.0.0.0:8080 --auth password ."]
