@@ -10,23 +10,11 @@ int main() {
     printf("a = %d, b = %d\n", a, b);
     
     // Inline assembly usando sintaxis de Microsoft
-    #ifdef _MSC_VER
     __asm {
         mov eax, a
         add eax, b
         mov result, eax
     }
-    #else
-    // Alternativa para GCC/Clang en modo no-MSVC
-    __asm__ __volatile__ (
-        "movl %1, %%eax\n\t"
-        "addl %2, %%eax\n\t"
-        "movl %%eax, %0"
-        : "=m" (result)
-        : "m" (a), "m" (b)
-        : "eax"
-    );
-    #endif
     
     printf("Resultado de la suma (usando assembly): %d\n", result);
     

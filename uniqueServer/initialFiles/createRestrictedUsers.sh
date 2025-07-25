@@ -32,6 +32,8 @@ tail -n +2 "$CSV_FILE" | while IFS=',' read -r username password; do
     cp /tmp/main.c "/home/$username/work/"
     cp /tmp/README.md "/home/$username/work/"
 
+    chown "$username:$username" "/home/$username/work/main.c"
+
     if [[ "$USE_RBASH" -eq 1 ]]; then
         mkdir -p "/home/$username/bin"
         # Copy allowed commands
