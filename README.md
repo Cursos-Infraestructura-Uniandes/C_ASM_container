@@ -3,7 +3,7 @@
 Bienvenido al curso de **Tecnologías e Infraestructura de Cómputo**.
 
 En este repositorio encontrará el ambiente de desarrollo contenerizado con un compilador de C/ASM en arquitectura de 32 bits que puede ser usado para el primer módulo del curso. 
-Este entorno le permitirá replicar y ejecutar **localmente (en su propia máquina)** el mismo ambiente de desarrollo que se entrega durante el laboratorio, garantizando así la compatibilidad y uniformidad en las prácticas. 
+Este entorno le permitirá replicar y ejecutar **localmente (en su propia máquina)** el mismo ambiente de desarrollo que se usó durante el primer laboratorio, garantizando así la compatibilidad y uniformidad en las prácticas. 
 
 Para utilizarlo es necesario tener instaladas las siguientes herramientas:
 
