@@ -2,7 +2,8 @@
 
 Bienvenido al curso de **Tecnologías e Infraestructura de Cómputo**.
 
-En este repositorio encontrará el ambiente de desarrollo contenerizado con un compilador de C/ASM en arquitectura de 32 bits, la cual será utilizada durante el curso. Este entorno le permitirá replicar y ejecutar **localmente** el mismo ambiente de desarrollo que se entrega durante el laboratorio, garantizando así la compatibilidad y uniformidad en las prácticas.
+En este repositorio encontrará el ambiente de desarrollo contenerizado con un compilador de C/ASM en arquitectura de 32 bits que puede ser usado para el primer módulo del curso. 
+Este entorno le permitirá replicar y ejecutar **localmente (en su propia máquina)** el mismo ambiente de desarrollo que se entrega durante el laboratorio, garantizando así la compatibilidad y uniformidad en las prácticas. 
 
 Para utilizarlo es necesario tener instaladas las siguientes herramientas:
 
@@ -12,13 +13,13 @@ En el caso de contar con un computador windows, recomendamos utilizar Docker sob
 
 ## Nota importante
 
-Los archivos que usted cree dentro de este ambiente de desarrollo se almacenarán dentro del contenedor. Siempre mantenga una copia o un respaldo (backup) de sus archivos en su máquina local. **La perdida de archivos no será una excusa válida para entregas tarde.**
+Los archivos que usted cree dentro de este ambiente de desarrollo se almacenarán dentro del contenedor. Siempre mantenga una copia de respaldo (backup) en otro ambiente; ya sea en el sistema de archivos de su máquina o en onedrive. **Es su responsabilidad mantener una copia de respaldo para evitar inconvenientes.**
 
 ## Despliegue y uso del contenedor
 
 ### Despliegue
 
-Para desplegar el contenedor (una vez tenga instalado docker) debe:
+Para desplegar el contenedor (después de tener docker instalado) debe:
 
 1. Clone este repositorio en su computadora.
 2. En su terminal, dirijase al directorio donde clonó el repositorio (puede utilizar el comando cd \<rutaRepositorio\> para este fin).
@@ -43,19 +44,10 @@ La contraseña por defecto se encuentra en el dockerfile y es "123456".
 
 ### Uso con VS code local
 
-
-También es posible conectarse al servidor de VS code del contenedor desde su VSCode local de dos maneras: 
-1. Conexión por SSH
-    * Puede conectarse de la misma forma que en el laboratorio cambiando la IP por ```localhost``` y el puerto a ```2222```.
+    * Ahora podrá conectarse al servidor de VS code del contenedor de la misma forma usada en el primer laboratorio, pero cambiando la IP por ```localhost``` y el puerto a ```2222```.
     * Si requiere más detalles sobre la conexión puede revisar [la guía del laboratorio](https://github.com/Cursos-Infraestructura-Uniandes/C_ASM_container/wiki/Preparar-conexi%C3%B3n-a-ambiente-de-desarrollo). 
 
-2. Utilizando la extensión "Dev Containers":
-    * Abra la paleta de comandos ("F1" o "⌘+Shift+P") seleccionando ```"Dev Containers: Attach to Running Container..."``` 
-    * En la lista, aparecerá su contenedor con el tag de la imagen (por ejemplo ```c-dev-env```). Selecciónelo para conectarse.
-    * Desde la interfaz gráfica también puede usar la vista Remote Explorer (barra de actividades → pestaña Dev Containers). Ahí debería ver su contenedor y podrá usar la opción Attach to Container.
-    * Una vez conectado, utilice Open Folder y seleccione la carpeta work, donde encontrará el ejemplo base.
-    
-    conectandose por SSH al igual que en el laboratorio cambiando la IP por su localhost y el puerto 2222.
+
 
 
 
