@@ -24,8 +24,9 @@ RUN ssh-keygen -A
 #RUN useradd -m -s /bin/bash testing && \
 #    echo 'testing:testing' | chpasswd 
 
-# 2. Create a non-root user for development
+# 2. Create a non-root user for development and set a default passwd
 RUN useradd -m -s /bin/bash -G sudo developer && \
+    echo "developer:123456" | chpasswd && \
     echo "developer ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # 3. Install Node.js (required by code-server) and code-server itself
@@ -34,21 +35,24 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # 4. Create the directory and assing the user 
-RUN mkdir -p /home/developer/project && chown -R developer:developer /home/developer
+RUN mkdir -p /home/developer/work && chown -R developer:developer /home/developer
 
 # 5. Switch to the developer user and configure the environment
 USER developer
-WORKDIR /home/developer/project
+WORKDIR /home/developer/work
+# Generate SSH host keys for developer user
+RUN ssh-keygen -A 
 
 # Copy example source files into the container
 COPY --chown=developer:developer uniqueServer/initialFiles/main.c .
 COPY --chown=developer:developer uniqueServer/initialFiles/README.md .
 
 # 8. Expose the port and set the start command with a fixed password
-EXPOSE 8080
-EXPOSE 22
+EXPOSE 8080 22
 
-# El password de VSCODE, this is only to be used in local development
+# VSCODE password, this is only to be used in local development
 ENV PASSWORD="123456"
-# start both services
-CMD ["sh", "-c", "/usr/sbin/sshd -D && code-server --bind-addr 0.0.0.0:8080 --auth password ."]
+
+# Start script: generate keys at runtime, then start sshd and code-server in background
+CMD ["sh", "-c", "sudo /usr/bin/ssh-keygen -A && sudo /usr/sbin/sshd -D & code-server --bind-addr 0.0.0.0:8080 --auth password ."]
+
