@@ -24,9 +24,12 @@ RUN ssh-keygen -A
 #RUN useradd -m -s /bin/bash testing && \
 #    echo 'testing:testing' | chpasswd 
 
-# 2. Create a non-root user for development and set a default passwd
+# 2. Create a non-root user for development
+# Add a password for the local access from the env arguments
+ARG PASSWORD 
+ENV PASSWORD ${PASSWORD}
 RUN useradd -m -s /bin/bash -G sudo developer && \
-    echo "developer:123456" | chpasswd && \
+    echo "developer:${PASSWORD}" | chpasswd && \
     echo "developer ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # 3. Install Node.js (required by code-server) and code-server itself
@@ -49,9 +52,6 @@ COPY --chown=developer:developer uniqueServer/initialFiles/README.md .
 
 # 8. Expose the port and set the start command with a fixed password
 EXPOSE 8080 22
-
-# VSCODE password, this is only to be used in local development
-ENV PASSWORD="123456"
 
 # Start script: generate keys at runtime, then start sshd and code-server in background
 CMD ["sh", "-c", "sudo /usr/bin/ssh-keygen -A && sudo /usr/sbin/sshd -D & code-server --bind-addr 0.0.0.0:8080 --auth password ."]

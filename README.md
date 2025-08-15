@@ -23,10 +23,10 @@ Para desplegar el contenedor (después de tener docker instalado) debe:
 
 1. Clone este repositorio en su computadora.
 2. En su terminal, dirijase al directorio donde clonó el repositorio (puede utilizar el comando cd \<rutaRepositorio\> para este fin).
-3. Construir la imagen de docker:
+3. Construir la imagen de docker, debe cambiar el parámetro \<SuContraseña\> por la contraseña de su preferencia para acceder al ambiente de desarrollo:
 
     ```bash
-    docker build -t c-dev-env .
+    docker build --build-arg PASSWORD=<SuContraseña> -t c-dev-env .
     ```
 
     Este proceso puede tardar algunos minutos mientras se descargan las dependencias necesarias para el contenedor. Sea paciente mientras se realiza la instalación.
@@ -34,21 +34,30 @@ Para desplegar el contenedor (después de tener docker instalado) debe:
 4. Instanciar el contenedor
 
     ```bash
-    docker run --rm -p 8080:8080 -p 2222:22 c-dev-env
+    docker run -d -p 8080:8080 -p 2222:22 c-dev-env
     ```
 ### Uso en interfaz web
 
-Dirijase a su navegador de preferencia y podrá utilizar el ambiente de desarrollo en la siguiente url http://localhost:8080 
+Dirijase a su navegador de preferencia y podrá utilizar el ambiente de desarrollo en la siguiente url http://localhost:8080
 
-La contraseña por defecto se encuentra en el dockerfile y es "123456".
+Para ingresar a la interfaz web debe utilizar la contraseña que definio durante la construcción del contenedor (parámetro \<SuContraseña\>).
 
 ### Uso con VS code local
 
-    * Ahora podrá conectarse al servidor de VS code del contenedor de la misma forma usada en el primer laboratorio, pero cambiando la IP por ```localhost``` y el puerto a ```2222```.
-    * Si requiere más detalles sobre la conexión puede revisar [la guía del laboratorio](https://github.com/Cursos-Infraestructura-Uniandes/C_ASM_container/wiki/Preparar-conexi%C3%B3n-a-ambiente-de-desarrollo). 
+Ahora podrá conectarse al servidor de VS code del contenedor de la misma forma usada en el primer laboratorio, pero cambiando la IP por ```localhost``` y el puerto a ```2222```. La contraseña de acceso es la definio durante la construcción del contenedor (parámetro \<SuContraseña\>).
+Si requiere más detalles sobre la conexión puede revisar [la guía del laboratorio](https://github.com/Cursos-Infraestructura-Uniandes/C_ASM_container/wiki/Preparar-conexi%C3%B3n-a-ambiente-de-desarrollo). 
 
+## Al finalizar
 
+Una vez haya terminado de trabajar, detenga la ejecución del contenedor para liberar recursos. 
 
+1. Liste los contenedores activos con: 
+    ```bash
+    docker ps
+    ```
+2. Localice el ID del contenedor correspondiente (puede identificarlo por el tag asignado, en el ejemplo ```c-dev-env```).
 
-
-
+3. Deténgalo con: 
+    ```bash
+    docker kill <ID>
+    ```
