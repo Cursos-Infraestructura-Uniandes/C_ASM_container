@@ -55,7 +55,8 @@ Una vez haya terminado de trabajar, detenga la ejecución del contenedor para li
     ```bash
     docker ps
     ```
-2. Localice el ID del contenedor correspondiente (puede identificarlo por el tag asignado, en el ejemplo ```c-dev-env```).
+2. Localice el ID del contenedor correspondiente (puede identificarlo por el tag asignado a la imagen, en el ejemplo ```c-dev-env```).
+    ![Vista de ejemplo resultado comando docker ps](containerId.png)
 
 3. Deténgalo con: 
     ```bash
