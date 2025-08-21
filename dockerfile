@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
     sudo \
     build-essential \
     clang \
-    gcc-multilib \
     openssh-server \
     && rm -rf /var/lib/apt/lists/*
 
@@ -55,4 +54,5 @@ EXPOSE 8080 22
 
 # Start script: generate keys at runtime, then start sshd and code-server in background
 CMD ["sh", "-c", "sudo /usr/bin/ssh-keygen -A && sudo /usr/sbin/sshd -D & code-server --bind-addr 0.0.0.0:8080 --auth password ."]
+
 
